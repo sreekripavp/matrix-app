@@ -1,84 +1,67 @@
-:root {
-    --bg: rgba(0,0,0,0.7);
-    --text: #fff;
-}
-
-.light {
-    --bg: rgba(255,255,255,0.85);
-    --text: #111;
-}
-
-body {
-    margin: 0;
-    font-family: Arial;
-    color: var(--text);
-
-    background: url("matrixback.jpg") no-repeat center center/cover;
-}
-
-header {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px 20px;
-    background: var(--bg);
-}
-
-.container {
-    padding: 15px;
-    text-align: center;
-}
-
-input {
-    width: 60px;
-    padding: 5px;
-    margin: 5px;
-}
-
-button {
-    padding: 8px 12px;
-    margin: 5px;
-    border-radius: 8px;
-    border: none;
-    background: #ff7b00;
-    color: white;
-    cursor: pointer;
-}
-
-table {
-    margin: 15px auto;
-    border-collapse: collapse;
-}
-
-td {
-    padding: 5px;
-}
-
-.matrix-cell {
-    width: 60px;
-    text-align: center;
-}
-
-.pivot {
-    background: #00ffcc;
-    color: black;
-    font-weight: bold;
-}
-
-#steps, #history {
-    background: var(--bg);
+/* Buttons grid */
+.action-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
     margin-top: 15px;
-    padding: 10px;
-    border-radius: 10px;
 }
 
-/* 📱 Mobile Optimization */
-@media (max-width: 600px) {
-    input {
-        width: 45px;
-    }
+.action-grid button {
+    padding: 15px;
+    font-size: 16px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #ff7b00, #ff5500);
+}
 
-    button {
-        width: 100%;
-        margin-top: 5px;
+/* Floating 3-dot menu */
+.menu {
+    position: fixed;
+    top: 15px;
+    right: 15px;
+}
+
+.menu button {
+    font-size: 20px;
+    padding: 10px;
+    border-radius: 50%;
+    background: #222;
+}
+
+.menu-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    background: rgba(0,0,0,0.9);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.menu-content button {
+    display: block;
+    width: 180px;
+    padding: 10px;
+    border-bottom: 1px solid #444;
+    background: none;
+    text-align: left;
+}
+
+/* Better inputs layout */
+.controls {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+/* Bigger matrix spacing */
+.matrix-cell {
+    width: 70px;
+    height: 40px;
+}
+
+/* Mobile fix */
+@media (max-width: 600px) {
+    .action-grid {
+        grid-template-columns: 1fr;
     }
 }
