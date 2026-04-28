@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Matrix Calculator Pro</title>
+
+<link rel="stylesheet" href="style.css">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+
+<body>
+
+<header>
+    <h1>📊 Matrix Calculator Pro</h1>
+    <button onclick="toggleTheme()">🌗</button>
+</header>
+
+<div class="container">
+
+<div class="controls">
+    Rows: <input type="number" id="rows" value="3">
+    Cols: <input type="number" id="cols" value="3">
+
+    <button onclick="generateMatrix()">Create</button>
+    <button onclick="randomMatrix()">🎲 Random</button>
+</div>
+
+<div id="matrixContainer"></div>
+
+<div class="buttons">
+    <button onclick="calculateRank()">Rank</button>
+    <button onclick="calculateDet()">Determinant</button>
+    <button onclick="calculateInverse()">Inverse</button>
+    <button onclick="downloadPDF()">📄 PDF</button>
+</div>
+
+<h2 id="result"></h2>
+
+<div id="steps"></div>
+
+<div id="history"></div>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
