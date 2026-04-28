@@ -209,5 +209,13 @@ async function downloadPDF() {
 
     doc.save("matrix.pdf");
 }
+function toggleMenu() {
+    let menu = document.getElementById("menuContent");
+    menu.style.display = (menu.style.display === "block") ? "none" : "block";
+}
 
+function clearHistory() {
+    historyList = [];
+    document.getElementById("history").innerHTML = "";
+}
 generateMatrix();
