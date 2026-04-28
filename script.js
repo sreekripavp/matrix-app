@@ -1,9 +1,22 @@
 let historyList = [];
 
+/* MENU */
+function toggleMenu() {
+    let menu = document.getElementById("menuContent");
+    menu.style.display = (menu.style.display === "block") ? "none" : "block";
+}
+
+function clearHistory() {
+    historyList = [];
+    document.getElementById("history").innerHTML = "";
+}
+
+/* THEME */
 function toggleTheme() {
     document.body.classList.toggle("light");
 }
 
+/* MATRIX */
 function generateMatrix() {
     let r = rows.value, c = cols.value;
     let html = "<table>";
@@ -46,40 +59,76 @@ function getMatrix() {
     return m;
 }
 
-/* ---------- RANK ---------- */
+/* DISPLAY */
+function displayMatrix(mat, pr=-1, pc=-1) {
+    let html = "<table border='1'>";
+    mat.forEach((row,i)=>{
+        html += "<tr>";
+        row.forEach((val,j)=>{
+            let cls = (i===pr && j===pc) ? "pivot" : "";
+            html += `<td class="${cls}">${val.toFixed(2)}</td>`;
+        });
+        html += "</tr>";
+    });
+    html += "</table>";
+    return html;
+}
+
+/* RANK WITH EXPLANATION */
 function calculateRank() {
     let m = JSON.parse(JSON.stringify(getMatrix()));
-    let r = m.length, c = m[0].length;
+    let rows = m.length;
+    let cols = m[0].length;
+
     let rank = 0;
     let stepsHTML = "";
 
-    for (let col = 0; col < c; col++) {
+    for (let col = 0; col < cols; col++) {
+
         let pivot = -1;
 
-        for (let i = rank; i < r; i++) {
+        for (let i = rank; i < rows; i++) {
             if (m[i][col] !== 0) {
                 pivot = i;
                 break;
             }
         }
 
-        if (pivot === -1) continue;
+        if (pivot === -1) {
+            stepsHTML += `<p>Column ${col+1}: No pivot → skip</p>`;
+            continue;
+        }
 
-        [m[rank], m[pivot]] = [m[pivot], m[rank]];
+        stepsHTML += `<p><b>Step ${rank+1}:</b> Pivot at Row ${pivot+1}, Column ${col+1}</p>`;
+
+        if (pivot !== rank) {
+            [m[rank], m[pivot]] = [m[pivot], m[rank]];
+            stepsHTML += `<p>Swap R${rank+1} ↔ R${pivot+1}</p>`;
+            stepsHTML += displayMatrix(m, rank, col);
+        }
 
         let pv = m[rank][col];
-        for (let j = 0; j < c; j++) m[rank][j] /= pv;
+        stepsHTML += `<p>Divide R${rank+1} by ${pv}</p>`;
 
-        for (let i = 0; i < r; i++) {
-            if (i !== rank) {
-                let factor = m[i][col];
-                for (let j = 0; j < c; j++) {
-                    m[i][j] -= factor * m[rank][j];
-                }
-            }
+        for (let j = 0; j < cols; j++) {
+            m[rank][j] /= pv;
         }
 
         stepsHTML += displayMatrix(m, rank, col);
+
+        for (let i = 0; i < rows; i++) {
+            if (i !== rank && m[i][col] !== 0) {
+                let factor = m[i][col];
+                stepsHTML += `<p>R${i+1} → R${i+1} - (${factor})R${rank+1}</p>`;
+
+                for (let j = 0; j < cols; j++) {
+                    m[i][j] -= factor * m[rank][j];
+                }
+
+                stepsHTML += displayMatrix(m, rank, col);
+            }
+        }
+
         rank++;
     }
 
@@ -89,12 +138,12 @@ function calculateRank() {
     saveHistory("Rank", rank);
 }
 
-/* ---------- DETERMINANT ---------- */
+/* DETERMINANT */
 function calculateDet() {
     let m = getMatrix();
 
     if (m.length !== m[0].length) {
-        result.innerText = "Determinant only for square matrix";
+        result.innerText = "Square matrix only";
         return;
     }
 
@@ -106,7 +155,6 @@ function calculateDet() {
 
 function determinant(m) {
     if (m.length === 1) return m[0][0];
-
     if (m.length === 2)
         return m[0][0]*m[1][1] - m[0][1]*m[1][0];
 
@@ -120,13 +168,13 @@ function determinant(m) {
     return det;
 }
 
-/* ---------- INVERSE ---------- */
+/* INVERSE */
 function calculateInverse() {
     let m = getMatrix();
     let n = m.length;
 
     if (n !== m[0].length) {
-        result.innerText = "Inverse only for square matrix";
+        result.innerText = "Square matrix only";
         return;
     }
 
@@ -154,7 +202,7 @@ function calculateInverse() {
     }
 
     let inv = M.map(row => row.slice(n));
-    result.innerText = "Inverse calculated";
+    result.innerText = "Inverse:";
     steps.innerHTML = displayMatrix(inv);
 
     saveHistory("Inverse", "Done");
@@ -171,28 +219,13 @@ function identity(n) {
     return I;
 }
 
-/* ---------- DISPLAY ---------- */
-function displayMatrix(mat, pr=-1, pc=-1) {
-    let html = "<table border='1'>";
-    mat.forEach((row,i)=>{
-        html += "<tr>";
-        row.forEach((val,j)=>{
-            let cls = (i===pr && j===pc) ? "pivot" : "";
-            html += `<td class="${cls}">${val.toFixed(2)}</td>`;
-        });
-        html += "</tr>";
-    });
-    html += "</table>";
-    return html;
-}
-
-/* ---------- HISTORY ---------- */
+/* HISTORY */
 function saveHistory(type, value) {
     historyList.push(`${type}: ${value}`);
-    history.innerHTML = historyList.reverse().join("<br>");
+    history.innerHTML = historyList.slice().reverse().join("<br>");
 }
 
-/* ---------- PDF ---------- */
+/* PDF */
 async function downloadPDF() {
     const { jsPDF } = window.jspdf;
     let doc = new jsPDF();
@@ -209,13 +242,5 @@ async function downloadPDF() {
 
     doc.save("matrix.pdf");
 }
-function toggleMenu() {
-    let menu = document.getElementById("menuContent");
-    menu.style.display = (menu.style.display === "block") ? "none" : "block";
-}
 
-function clearHistory() {
-    historyList = [];
-    document.getElementById("history").innerHTML = "";
-}
 generateMatrix();
