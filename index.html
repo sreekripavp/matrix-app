@@ -3,47 +3,79 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Matrix Calculator Pro</title>
 
 <link rel="stylesheet" href="style.css">
 
+<!-- PDF Library -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
 </head>
 
 <body>
 
+<!-- HEADER -->
 <header>
     <h1>📊 Matrix Calculator Pro</h1>
-    <button onclick="toggleTheme()">🌗</button>
+
+    <!-- 3 DOT MENU -->
+    <div class="menu">
+        <button onclick="toggleMenu()">⋮</button>
+
+        <div id="menuContent" class="menu-content">
+            <button onclick="downloadPDF()">📄 Download PDF</button>
+            <button onclick="toggleTheme()">🌗 Toggle Theme</button>
+            <button onclick="clearHistory()">🗑 Clear History</button>
+        </div>
+    </div>
 </header>
 
+<!-- MAIN CONTAINER -->
 <div class="container">
 
-<div class="controls">
-    Rows: <input type="number" id="rows" value="3">
-    Cols: <input type="number" id="cols" value="3">
+    <!-- INPUT CONTROLS -->
+    <div class="controls">
+        <div>
+            <label>Rows</label><br>
+            <input type="number" id="rows" value="3">
+        </div>
 
-    <button onclick="generateMatrix()">Create</button>
-    <button onclick="randomMatrix()">🎲 Random</button>
+        <div>
+            <label>Columns</label><br>
+            <input type="number" id="cols" value="3">
+        </div>
+    </div>
+
+    <!-- MATRIX BUTTONS -->
+    <div class="matrix-actions">
+        <button class="primary" onclick="generateMatrix()">Create Matrix</button>
+        <button class="secondary" onclick="randomMatrix()">🎲 Random</button>
+    </div>
+
+    <!-- MATRIX GRID -->
+    <div id="matrixContainer"></div>
+
+    <!-- BIG ACTION BUTTONS -->
+    <div class="action-grid">
+        <button class="rank-btn" onclick="calculateRank()">📊 Rank</button>
+        <button class="det-btn" onclick="calculateDet()">📐 Determinant</button>
+        <button class="inv-btn" onclick="calculateInverse()">🔁 Inverse</button>
+    </div>
+
+    <!-- RESULT -->
+    <h2 id="result"></h2>
+
+    <!-- STEPS -->
+    <div id="steps"></div>
+
+    <!-- HISTORY -->
+    <div id="history"></div>
+
 </div>
 
-<div id="matrixContainer"></div>
-
-<div class="buttons">
-    <button onclick="calculateRank()">Rank</button>
-    <button onclick="calculateDet()">Determinant</button>
-    <button onclick="calculateInverse()">Inverse</button>
-    <button onclick="downloadPDF()">📄 PDF</button>
-</div>
-
-<h2 id="result"></h2>
-
-<div id="steps"></div>
-
-<div id="history"></div>
-
-</div>
-
+<!-- SCRIPT -->
 <script src="script.js"></script>
+
 </body>
 </html>
